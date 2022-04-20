@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-/* Autores: Antony Gusm�o, Mikael Hayden, Walter Jonas*/
+/* Autores: Antony Gusmão, Mikael Hayden, Walter Jonas*/
 
 struct no
 {
@@ -13,66 +13,66 @@ struct no
 
 void RotacaoEsquerda(struct no **Raiz, struct no *x)
 {
-	struct no *y = x->dir;
+	struct no *y = x->dir;	//Aux que recebe o No a Direita
 
-	x->dir = y->esq;
+	x->dir = y->esq;	//X recebe o filho esquerdo de Y
 
-	if (x->dir != NULL)
+	if (x->dir != NULL)	//Se filho esquerdo de Y existe
 	{
-		x->dir->Pai = x;
+		x->dir->Pai = x; //O pai passa a ser o X 
 	}
 
-	y->Pai = x->Pai;
+	y->Pai = x->Pai; //Y recebe o pai de X
 
-	if (x->Pai == NULL)
-	{
+	if (x->Pai == NULL)//Se o pai for null entao a Raiz passa a ser Y
+	{	
 		(*Raiz) = y;
 	}
 		
-	else if (x == x->Pai->esq)
+	else if (x == x->Pai->esq)	//No Rotacionado é Filho a esquerda
 	{
-		x->Pai->esq = y;
+		x->Pai->esq = y;	
 	}
 		
-	else
+	else	////No Rotacionado é Filho a Direita
 	{
 		x->Pai->dir = y;
 	}
 
-	y->esq = x;
+	y->esq = x;	//Y passa a ser pai de X
 
-	x->Pai = y;
+	x->Pai = y;	//X passa  a ser filho de Y
 }
 
 void RotacaoDireita(struct no **Raiz, struct no *y)
 {
-	struct no *x = y->esq;
-	y->esq = x->dir;
+	struct no *x = y->esq;	//Aux que recebe o No a Direita
+	y->esq = x->dir;		
 	
 	if (x->dir != NULL)
 	{
 		x->dir->Pai = y;
 	}
-		
-	x->Pai = y->Pai;
 	
-	if (x->Pai == NULL)
+	x->Pai = y->Pai; //X recebe o pai de Y
+	
+	if (x->Pai == NULL)	//Se o pai for null entao a Raiz passa a ser X
 	{
 		(*Raiz) = x;
 	}
 		
-	else if (y == y->Pai->esq)
+	else if (y == y->Pai->esq) //Se Y for filho a esquerda 
 	{
-		y->Pai->esq = x;
+		y->Pai->esq = x;//O Novo filho a esquerda passa a ser X
 	}
 		
-	else
+	else	//Se Y for filho a direita
 	{
-		y->Pai->dir = x;
+		y->Pai->dir = x;	//O Novo filho a direita passa a ser X
 	}
 		
-	x->dir = y;
-	y->Pai = x;
+	x->dir = y;	//X passa a ser pai de Y
+	y->Pai = x;	//Y passa a ser filho de X
 }
 
 void balanceamento(struct no **Raiz, struct no *z) 
@@ -84,17 +84,17 @@ void balanceamento(struct no **Raiz, struct no *z)
 		// Find uncle and store uncle in y
 		if (z->Pai == z->Pai->Pai->esq) //Se o pai do No For um filho a esquerda 
 			y = z->Pai->Pai->dir;	
-		else
+		else							//Se o pai do No For um filho a direita
 			y = z->Pai->Pai->esq;
 
-		if (y != NULL)
+		if (y != NULL)	//Se tio Existe
 		{
-			if (y->cor == 'R')
+			if (y->cor == 'R')	//Se tio é Rubro
 			{
-				y->cor = 'B';
-				z->Pai->cor = 'B';
-				z->Pai->Pai->cor = 'R';
-				z = z->Pai->Pai;
+				y->cor = 'B';	//Tio Fica Negro
+				z->Pai->cor = 'B';	//Pai Fica Negro
+				z->Pai->Pai->cor = 'R';	//Avo Fica Rubro
+				z = z->Pai->Pai;	//Z passa a ser o avo 
 			}
 			else
 			{
@@ -104,48 +104,48 @@ void balanceamento(struct no **Raiz, struct no *z)
 
 		else
 		{
-			if (z->Pai == z->Pai->Pai->esq && z == z->Pai->esq)
+			if (z->Pai == z->Pai->Pai->esq && z == z->Pai->esq)	//Tiver alinhado a Esquerda
 			{
-				char ch = z->Pai->cor;
-				z->Pai->cor = z->Pai->Pai->cor;
-				z->Pai->Pai->cor = ch;
-				RotacaoDireita(Raiz, z->Pai->Pai);
+				char ch = z->Pai->cor;	//Salva a Cor do Pai
+				z->Pai->cor = z->Pai->Pai->cor;	// Pai recebe cor do Avo
+				z->Pai->Pai->cor = ch;	// e Avo Recebe Cor do Pai
+				RotacaoDireita(Raiz, z->Pai->Pai);	//Realiza a rotação a esquerda
 			}
 
-			else if (z->Pai == z->Pai->Pai->esq && z == z->Pai->dir)
+			else if (z->Pai == z->Pai->Pai->esq && z == z->Pai->dir)	//Tiver Pai a Esquerda e Avo a Direita
 			{
-				char ch = z->cor;
-				z->cor = z->Pai->Pai->cor;
-				z->Pai->Pai->cor = ch;
-				RotacaoEsquerda(Raiz, z->Pai);
+				char ch = z->cor;	//Salva a Cor do Filho
+				z->cor = z->Pai->Pai->cor;	//Filho Recebe a cor do Avo
+				z->Pai->Pai->cor = ch;	//Avo Recebe a Cor de Filho
+				RotacaoEsquerda(Raiz, z->Pai);	//Realiza a Rotaçaõ Dupla a Direita
 				RotacaoDireita(Raiz, z->Pai);
 			}
 
-			else if (z->Pai == z->Pai->Pai->dir && z == z->Pai->dir)
+			else if (z->Pai == z->Pai->Pai->dir && z == z->Pai->dir)	//Tiver alinhado a Direita
 			{
-				char ch = z->Pai->cor;
-				z->Pai->cor = z->Pai->Pai->cor;
-				z->Pai->Pai->cor = ch;
-				RotacaoEsquerda(Raiz, z->Pai->Pai);
+				char ch = z->Pai->cor;	//Salva a Cor do Pai
+				z->Pai->cor = z->Pai->Pai->cor;	// Pai recebe cor do Avo
+				z->Pai->Pai->cor = ch;	// e Avo Recebe Cor do Pai
+				RotacaoEsquerda(Raiz, z->Pai->Pai);	// Realiza a rotação a esquerda
 			}
 
-			else if (z->Pai == z->Pai->Pai->dir && z == z->Pai->esq)
+			else if (z->Pai == z->Pai->Pai->dir && z == z->Pai->esq)	//Tiver Pai a Direita e Avo a Esquerda
 			{
-				char ch = z->cor;
-				z->cor = z->Pai->Pai->cor;
-				z->Pai->Pai->cor = ch;
-				RotacaoDireita(Raiz, z->Pai);
-				RotacaoEsquerda(Raiz, z->Pai);
+				char ch = z->cor;	//Salva a Cor do Filho
+				z->cor = z->Pai->Pai->cor; //Filho Recebe a cor do Avo
+				z->Pai->Pai->cor = ch;	//Avo Recebe a Cor de Filho
+				RotacaoDireita(Raiz, z->Pai);	//Realiza a Rotação dupla a Esquerda
+				RotacaoEsquerda(Raiz, z->Pai);	
 			}
 		}
 	}
 	
-	(*Raiz)->cor = 'B';
+	(*Raiz)->cor = 'B';	//Faz a Raiz se Negra no Final de Tudo
 }
 
-//Fun��o pra inserir NO na Arvore Rubro Negra
+//Função pra inserir NO na Arvore Rubro Negra
 void insere(struct no **Raiz, int valor) {	
-	struct no *z = (struct no*) malloc(sizeof(struct no));	//aloca�ao pro novo ponteiro 
+	struct no *z = (struct no*) malloc(sizeof(struct no));	//alocaçao pro novo No
 	z->info = valor;
 	z->esq = NULL;
 	z->dir = NULL;
@@ -153,7 +153,7 @@ void insere(struct no **Raiz, int valor) {
 
 	if (*Raiz == NULL)
 	{	//se a raiz for nula, o novo ponteiro inserido passa a ser a raiz
-		z->cor = 'B';	//cor da raiz � preta
+		z->cor = 'B';	//cor da raiz é preta
 		(*Raiz) = z;	//raiz passa a ser o no Z
 	}
 	 
@@ -163,8 +163,8 @@ void insere(struct no **Raiz, int valor) {
 		struct no *x = (*Raiz);
 
 		while (x != NULL) 
-		{	//Verifica a localiza��o do novo no a ser inserido 
-			y = x;
+		{	//Verifica a localização do novo no a ser inserido 
+			y = x;	//Guarda a posição do pai do novo NO
 			if((z->info) == (x->info)){
 				printf("Valor ja Existe! \n");
 				return ;
@@ -181,7 +181,7 @@ void insere(struct no **Raiz, int valor) {
 		else
 			y->esq = z;
 		z->cor = 'R';
-
+		
 		balanceamento(Raiz, z);
 	}
 }
@@ -201,7 +201,7 @@ void Preordem(struct no **Raiz)
 	}
 }
 
-void visualizar_arvore(struct no **Raiz, int nivel) //Fun��o para vizualizar os n�s da arvore
+void visualizar_arvore(struct no **Raiz, int nivel) //Função para vizualizar os nós da arvore
 {
     int i;
     if(*Raiz)
@@ -254,5 +254,4 @@ int main()
 
 	return 0;
 }
-
 
