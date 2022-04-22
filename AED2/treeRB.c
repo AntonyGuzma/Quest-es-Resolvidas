@@ -109,7 +109,7 @@ void balanceamento(struct no **Raiz, struct no *z)
 				char ch = z->Pai->cor;	//Salva a Cor do Pai
 				z->Pai->cor = z->Pai->Pai->cor;	// Pai recebe cor do Avo
 				z->Pai->Pai->cor = ch;	// e Avo Recebe Cor do Pai
-				RotacaoDireita(Raiz, z->Pai->Pai);	//Realiza a rotação a esquerda
+				RotacaoDireita(Raiz, z->Pai->Pai);	//Realiza a rotação a direita
 			}
 
 			else if (z->Pai == z->Pai->Pai->esq && z == z->Pai->dir)	//Tiver Pai a Esquerda e Avo a Direita
